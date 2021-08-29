@@ -1,0 +1,58 @@
+<template id="tpl-player-character">
+  <meter
+    id="health-bar"
+    min="0"
+    max="1"
+    low="0.1"
+    high="0.9"
+    optimum="1"
+    value="1"></meter>
+  <img id="sprite" alt="Player Character" />
+  <style>
+    :host{
+      height: 100px;
+      width: 80px;
+      display: block;
+      border: dotted thin white;
+      box-shadow: 2px 5px 5px gray;
+      padding: 4px;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    img {
+      height: 100%;
+      width: 100%;
+    }
+    meter {
+      height: 7px;
+      width: 80%;
+      margin: 0 auto;
+      display: block;
+    }
+  </style>
+</template>
+
+<script>
+  class PlayerCharacter extends HTMLElement {
+    constructor() {
+      super();
+      const el = document
+        .querySelector(`#tpl-player-character`)
+        .content.cloneNode(true);
+      this.attachShadow({ mode: "open" }).appendChild(el);
+    }
+
+    connectedCallback() {
+      this.avatar = this.getAttribute("avatar");
+      if (!this.avatar) console.error("Player character needs an avatar attribute");
+      this.shadowRoot.querySelector('#sprite').setAttribute("src", this.__avatarSource)
+    }
+
+    get __avatarSource() {
+      return `components/player-character-assets/images/${this.avatar}.svg`;
+    }
+  }
+
+  customElements.define("player-character", PlayerCharacter);
+</script>

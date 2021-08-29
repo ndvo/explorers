@@ -1,0 +1,50 @@
+<template id="tpl-game-menu">
+  <nav class="game-menu">
+    <div class="meta-game">
+      <button>New game</button>
+      <button>Load game</button>
+      <button>Save game</button>
+    </div>
+    <div class="in-game">
+      <button>Choose character</button>
+      <button>Attack</button>
+      <button>Fortify</button>
+      <button>Rest</button>
+    </div>
+  </nav>
+  <style>
+    :host {
+      margin: 0 auto;
+      width: 800px;
+      display: block;
+    }
+    button {
+      margin: 0.2em;
+    }
+    .game-menu {
+      background-color: #eee;
+    }
+    .meta-game button{
+      font-size: 0.6em;
+      color: #888;
+    }
+    .in-game button{
+      font-size: 1.1em;
+      color: #000;
+    }
+  </style>
+</template>
+
+ <script>
+   class GameMenu extends HTMLElement {
+     constructor() {
+       super();
+      const el = document
+        .querySelector('#tpl-game-menu')
+        .content.cloneNode(true);
+      this.attachShadow({ mode: "open" }).appendChild(el);
+     }
+   }
+  customElements.define("game-menu", GameMenu);
+ </script>
+
