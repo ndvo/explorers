@@ -10,3 +10,10 @@ real-world scenario.
 
 The game avoids the use of the canvas element as the tools to be tested are
 focused on HTML/CSS/Javascript development.
+
+## Tools 
+
+The tools are assumed to exist in a sibling folder called tools.
+Symbolic links are used to invoke the tools
+
+- Chips https://github.com/isacvale/chips
