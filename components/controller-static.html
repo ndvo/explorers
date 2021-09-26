@@ -1,0 +1,108 @@
+<template id="tpl-controller">
+  <div></div>
+</template>
+
+<script>
+  class ControllerStatic extends HTMLElement {
+
+    direction = {
+      up: false,
+      down: false,
+      left: false,
+      right: false
+    }
+
+    constructor() {
+      super();
+      const el = document
+        .querySelector(`#tpl-controller`)
+        .content.cloneNode(true);
+      this.attachShadow({ mode: "open" }).appendChild(el);
+    }
+
+    connectedCallback() {
+      this.speed = this.numericAttribute('speed', 1);
+      console.debug('speed ', this.speed);
+      this.abortController = new AbortController();
+      document.addEventListener(
+        'keydown',
+        (ev) => this.movementCompute(ev),
+        {
+          signal: this.abortController
+        }
+      );
+      document.addEventListener(
+        'keyup',
+        (ev) => this.movementCompute(ev),
+        {
+          signal: this.abortController
+        }
+      );
+      this.parentElement.style.position = 'absolute';
+      this.parentElement.style.transition = 'top 0.2s, left 0.2s';
+      this.target = [
+        this.parentElement.offsetTop, this.parentElement.offsetLeft
+      ];
+      this.move();
+    }
+
+    disconnectedCallback() {
+      this.abortController.abort();
+      clearTimeout(this.timeoutId);
+    }
+
+    numericAttribute(attribute, defaultValue) {
+      const n_attr = this.getAttribute(attribute);
+      console.log('attr',n_attr);
+      if (n_attr === null || n_attr === "" || isNaN(n_attr)) {
+        return defaultValue;
+      }
+      return Number(n_attr);
+    }
+
+    /**
+     * Control the directional movement of a parent element
+     *
+     * @param {string} key from KeyDown.key
+     */
+    movementControl(ev) {
+      switch (ev.key) {
+        case 'w': case 'ArrowUp':
+          this.direction.up = ev.type === 'keydown';
+          break;
+        case 's': case 'ArrowDown':
+          this.direction.down = ev.type === 'keydown';
+          break;
+        case 'a': case 'ArrowLeft':
+          this.direction.left = ev.type === 'keydown';
+          break;
+        case 'd': case 'ArrowRight':
+          this.direction.right = ev.type === 'keydown';
+          break;
+      }
+    }
+
+    movementCompute(ev) {
+      this.movementControl(ev);
+    }
+
+    move() {
+      let movement = [
+        this.direction.up ? -1 : this.direction.down ? 1: 0,
+        this.direction.left ? -1 : this.direction.right ? 1: 0
+      ];
+      movement = movement.map(i => i*this.speed);
+      const countDirections = Math.max(1, movement.filter(i => i != 0).length);
+      movement = movement.map(i => i/countDirections);
+      this.target = [
+        this.target[0] + movement[0],
+        this.target[1] + movement[1]
+      ];
+      this.parentElement.style.top = `${this.target[0]}px`;
+      this.parentElement.style.left = `${this.target[1]}px`;
+      this.timeoutId = setTimeout(this.move.bind(this), 100);
+    }
+  }
+
+  customElements.define("controller-static", ControllerStatic);
+</script>
