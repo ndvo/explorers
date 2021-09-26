@@ -18,16 +18,16 @@
   </style>
 </template>
 
- <script>
-   class WorldMap extends HTMLElement {
-     constructor() {
-       super();
+<script>
+  class WorldMap extends HTMLElement {
+    constructor() {
+      super();
       const el = document
         .querySelector('#tpl-world-map')
         .content.cloneNode(true);
       this.attachShadow({ mode: "open" }).appendChild(el);
-     }
-   }
+    }
+  }
   customElements.define("world-map", WorldMap);
- </script>
+</script>
 

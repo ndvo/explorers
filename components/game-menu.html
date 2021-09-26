@@ -35,16 +35,16 @@
   </style>
 </template>
 
- <script>
-   class GameMenu extends HTMLElement {
-     constructor() {
-       super();
+<script>
+  class GameMenu extends HTMLElement {
+    constructor() {
+      super();
       const el = document
         .querySelector('#tpl-game-menu')
         .content.cloneNode(true);
       this.attachShadow({ mode: "open" }).appendChild(el);
-     }
-   }
+    }
+  }
   customElements.define("game-menu", GameMenu);
- </script>
+</script>
 
